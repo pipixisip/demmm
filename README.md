@@ -1,3 +1,52 @@
+
+CREATE DATABASE education_portal;
+
+USE education_portal;
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    phone VARCHAR(20) NOT NULL,
+    email VARCHAR(50) NOT NULL,
+    login VARCHAR(30) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE courses (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE applications (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    course_id INT NOT NULL,
+    start_date DATE NOT NULL,
+    payment_method ENUM('cash', 'bank_transfer') NOT NULL,
+    status ENUM('new', 'in_progress', 'completed') DEFAULT 'new',
+    feedback TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (course_id) REFERENCES courses(id)
+);
+
+-- Добавим несколько курсов
+INSERT INTO courses (name) VALUES 
+('Программирование на Python'),
+('Веб-разработка'),
+('Анализ данных'),
+('Графический дизайн'),
+('Маркетинг и реклама');
+
+-- Администратор
+INSERT INTO users (full_name, phone, email, login, password) VALUES 
+('Администратор', '+7(999)-999-99-99', 'admin@edu.ru', 'admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
+-- Пароль: education
+
+
+UPDATE users SET password = 'education' WHERE login = 'admin';
+
 style.css:
 body {
     font-family: Arial, sans-serif;
