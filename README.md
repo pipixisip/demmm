@@ -1,53 +1,30 @@
+Вот методичка для вашего проекта "Портал дополнительного профессионального образования":
 
-CREATE DATABASE education_portal;
+# Портал дополнительного профессионального образования
 
-USE education_portal;
+## Содержание
+1. [Файл стилей (CSS)](#stylescss)
+2. [PHP файлы](#php-файлы)
+   - [admin.php](#adminphp)
+   - [applications.php](#applicationsphp)
+   - [create_application.php](#create_applicationphp)
+   - [dashboard.php](#dashboardphp)
+   - [index.php](#indexphp)
+   - [login.php](#loginphp)
+   - [logout.php](#logoutphp)
+   - [register.php](#registerphp)
+3. [Вспомогательные файлы](#вспомогательные-файлы)
+   - [auth.php](#authphp)
+   - [db.php](#dbphp)
+   - [header.php](#headerphp)
+   - [footer.php](#footerphp)
+4. [SQL файл](#education_portalsql)
 
-CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    full_name VARCHAR(100) NOT NULL,
-    phone VARCHAR(20) NOT NULL,
-    email VARCHAR(50) NOT NULL,
-    login VARCHAR(30) NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+---
 
-CREATE TABLE courses (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL
-);
+## styles.css {#stylescss}
 
-CREATE TABLE applications (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    course_id INT NOT NULL,
-    start_date DATE NOT NULL,
-    payment_method ENUM('cash', 'bank_transfer') NOT NULL,
-    status ENUM('new', 'in_progress', 'completed') DEFAULT 'new',
-    feedback TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (course_id) REFERENCES courses(id)
-);
-
--- Добавим несколько курсов
-INSERT INTO courses (name) VALUES 
-('Программирование на Python'),
-('Веб-разработка'),
-('Анализ данных'),
-('Графический дизайн'),
-('Маркетинг и реклама');
-
--- Администратор
-INSERT INTO users (full_name, phone, email, login, password) VALUES 
-('Администратор', '+7(999)-999-99-99', 'admin@edu.ru', 'admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi');
--- Пароль: education
-
-
-UPDATE users SET password = 'education' WHERE login = 'admin';
-
-style.css:
+```css
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
@@ -197,6 +174,7 @@ tr:hover {
 .status-completed {
     color: #28a745;
 }
+
 /* Основные стили для главной страницы */
 .welcome-section {
     text-align: center;
@@ -347,7 +325,35 @@ tr:hover {
     color: #666;
     line-height: 1.5;
 }
-admin.php :
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    background: #0056b3;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+.button:hover {
+    background: #003d82;
+}
+
+.actions {
+    margin: 20px 0;
+    display: flex;
+    gap: 15px;
+}
+```
+
+---
+
+## PHP файлы
+
+### admin.php {#adminphp}
+
+```php
 <?php
 require_once 'includes/auth.php';
 redirectIfNotLoggedIn();
@@ -443,7 +449,11 @@ if (isset($_SESSION['success_message'])) {
 <?php
 require_once 'includes/footer.php';
 ?>
-application.php :
+```
+
+### applications.php {#applicationsphp}
+
+```php
 <?php
 require_once 'includes/auth.php';
 redirectIfNotLoggedIn();
@@ -541,7 +551,11 @@ if (isset($_SESSION['success_message'])) {
 <?php
 require_once 'includes/footer.php';
 ?>
-create_application.php :
+```
+
+### create_application.php {#create_applicationphp}
+
+```php
 <?php
 require_once 'includes/auth.php';
 redirectIfNotLoggedIn();
@@ -633,7 +647,11 @@ require_once 'includes/header.php';
 <?php
 require_once 'includes/footer.php';
 ?>
-dashboard.php :
+```
+
+### dashboard.php {#dashboardphp}
+
+```php
 <?php
 require_once 'includes/auth.php';
 redirectIfNotLoggedIn();
@@ -658,7 +676,11 @@ $user = $stmt->fetch();
 <?php
 require_once 'includes/footer.php';
 ?>
-index.php : 
+```
+
+### index.php {#indexphp}
+
+```php
 <?php
 require_once 'includes/auth.php';
 require_once 'includes/header.php';
@@ -779,7 +801,11 @@ require_once 'includes/header.php';
 <?php
 require_once 'includes/footer.php';
 ?>
-login.php :
+```
+
+### login.php {#loginphp}
+
+```php
 <?php
 require_once 'includes/db.php';
 require_once 'includes/auth.php';
@@ -855,7 +881,11 @@ if (isset($_SESSION['success_message'])) {
 <?php
 require_once 'includes/footer.php';
 ?>
-logout.php :
+```
+
+### logout.php {#logoutphp}
+
+```php
 <?php
 require_once 'includes/auth.php';
 
@@ -863,7 +893,11 @@ session_destroy();
 header('Location: login.php');
 exit();
 ?>
-register.php :
+```
+
+### register.php {#registerphp}
+
+```php
 <?php
 require_once 'includes/db.php';
 require_once 'includes/auth.php';
@@ -982,7 +1016,15 @@ require_once 'includes/header.php';
 <?php
 require_once 'includes/footer.php';
 ?>
-Папка includes, файл auth.php :
+```
+
+---
+
+## Вспомогательные файлы
+
+### auth.php {#authphp}
+
+```php
 <?php
 session_start();
 
@@ -1008,7 +1050,11 @@ function redirectIfNotAdmin() {
     }
 }
 ?>
-db.php:
+```
+
+### db.php {#dbphp}
+
+```php
 <?php
 $host = 'localhost';
 $dbname = 'education_portal';
@@ -1022,16 +1068,11 @@ try {
     die("Ошибка подключения к базе данных: " . $e->getMessage());
 }
 ?>
-footer.php:
-    </main>
-    <footer>
-        <div class="container">
-            <p>&copy; <?php echo date('Y'); ?> Портал дополнительного профессионального образования</p>
-        </div>
-    </footer>
-</body>
-</html>
-header.php:
+```
+
+### header.php {#headerphp}
+
+```php
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -1055,12 +1096,4 @@ header.php:
                         <?php endif; ?>
                         <li><a href="logout.php">Выйти</a></li>
                     <?php else: ?>
-                        <li><a href="index.php">Главная</a></li>
-                        <li><a href="register.php">Регистрация</a></li>
-                        <li><a href="login.php">Вход</a></li>
-                    <?php endif; ?>
-                </ul>
-            </nav>
-        </div>
-    </header>
-    <main class="container"></main>
+                        <li><a href="index.php
