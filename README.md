@@ -1164,3 +1164,36 @@ UPDATE users SET password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.
 
 css/style.css
 ```
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Портал ДПО</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Корочки.есть</h1>
+            <nav>
+                <ul>
+                    <?php if (isLoggedIn()): ?>
+                        <li><a href="dashboard.php">Главная</a></li>
+                        <li><a href="create_application.php">Новая заявка</a></li>
+                        <li><a href="applications.php">Мои заявки</a></li>
+                        <?php if (isAdmin()): ?>
+                            <li><a href="admin.php">Панель администратора</a></li>
+                        <?php endif; ?>
+                        <li><a href="logout.php">Выйти</a></li>
+                    <?php else: ?>
+                        <li><a href="index.php">Главная</a></li>
+                        <li><a href="register.php">Регистрация</a></li>
+                        <li><a href="login.php">Вход</a></li>
+                    <?php endif; ?>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <main class="container">
+
